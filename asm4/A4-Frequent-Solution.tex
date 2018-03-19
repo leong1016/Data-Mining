@@ -1,0 +1,201 @@
+\documentclass[11pt]{article}
+\usepackage{euscript}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\usepackage{epsfig}
+\usepackage{xspace}
+\usepackage{color}
+\usepackage{url}
+\usepackage{enumerate}
+\usepackage{listings}
+
+\usepackage{float}
+
+%%%%%%%  For drawing trees  %%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{calc, shapes, backgrounds}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\textheight}{9in}
+\setlength{\topmargin}{-0.600in}
+\setlength{\headheight}{0.2in}
+\setlength{\headsep}{0.250in}
+\setlength{\footskip}{0.5in}
+\flushbottom
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\columnsep}{2pc}
+\setlength{\parindent}{1em}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\eps}{\varepsilon}
+
+\renewcommand{\c}[1]{\ensuremath{\EuScript{#1}}}
+\renewcommand{\b}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\s}[1]{\textsf{#1}}
+
+\newcommand{\E}{\textbf{\textsf{E}}}
+\renewcommand{\Pr}{\textbf{\textsf{Pr}}}
+
+
+\title{Asmt 4: Frequent Items}
+\author{Yulong Liang (u1143816)}
+
+\begin{document}
+\maketitle
+
+\section{Streaming Algorithms}
+
+\paragraph{A: (20 points) Misra-Gries Algorithm}
+\begin{itemize}
+\item For stream S1, the output of the counters is as follows,
+$$[1, 104715, 194715, 1, 147715, 1, 1, 0, 1]$$
+\begin{enumerate}
+\item \textbf{Three objects} \textit{might} occur more than 20\% of the time.
+\item \textbf{No objects} \textit{must} occur more than 20\% of the time.
+\subparagraph{Reason: }
+According to the formula $f_q-\cfrac{m}{k}\le\hat{f_q}\le f_q$, we can derive $\hat{f_q}\le f_q\le \hat{f_q}+\cfrac{m}{k}$, where $\cfrac{m}{k}=\cfrac{1000000}{10}=100000$.\\
+For element \texttt{104715}, we have $104715\le f_q\le 204715$\\
+For element \texttt{194715}, we have $194715\le f_q\le 294715$\\
+For element \texttt{147715}, we have $147715\le f_q\le 247715$\\
+\end{enumerate}
+
+\item For stream S2, the output of the counters is as follows,
+$$[1, 121429, 1, 161430, 231429, 0, 0, 0, 0]$$
+\begin{enumerate}
+\item \textbf{Two objects} \textit{might} occur more than 20\% of the time.
+\item \textbf{One object} \textit{must} occur more than 20\% of the time.
+\subparagraph{Reason:}
+According to the formula $f_q-\cfrac{m}{k}\le\hat{f_q}\le f_q$, we can derive $\hat{f_q}\le f_q\le \hat{f_q}+\cfrac{m}{k}$, where $\cfrac{m}{k}=\cfrac{1000000}{10}=100000$.\\
+For element \texttt{121429}, we have $121429\le f_q\le 221429$\\
+For element \texttt{161430}, we have $161430\le f_q\le 261430$\\
+For element \texttt{231429}, we have $231429\le f_q\le 331429$\\
+\end{enumerate}
+\end{itemize}
+
+\paragraph{B: (20 points) Count-Min Sketch}
+\begin{itemize}
+\item For stream S1, the estimated counts for objects a, b, and c are,
+$$\hat{f_a}=266799 \quad \hat{f_b}=203000 \quad \hat{f_c}=193378$$
+\begin{enumerate}
+\item \textbf{a \& b} \textit{might} occur more than 20\% of the time.
+\subparagraph{Reason:}
+According to the formula $f_q\le\hat{f_q}\le f_q+\varepsilon F_1$, we can derive $\hat{f_q}-\varepsilon F_1\le f_q\le \hat{f_q}$, where we have
+$$\varepsilon=\cfrac{2}{k}=\cfrac{2}{10}=0.2$$
+$$F_1=\sum_jf_j=1,000,000$$
+For element \texttt{'a'}, We have $66799\le f_q\le 266799$, which might occur more than 20\% time with probably $1-\delta = 31/32$.\\
+For element \texttt{'b'}, We have $3000\le f_q\le 203000$, which might occur more than 20\% time with probably $1-\delta = 31/32$.\\
+For element \texttt{'c'}, We have $-6622\le f_q\le 193378$.\\
+\end{enumerate}
+
+\item For stream S2, the estimated counts for objects a, b, and c are,
+$$\hat{f_a}=294848 \quad \hat{f_b}=170000 \quad \hat{f_c}=239349$$
+\begin{enumerate}
+\item \textbf{a \& c} \textit{might} occur more than 20\% of the time.
+\subparagraph{Reason:}
+According to the formula $f_q\le\hat{f_q}\le f_q+\varepsilon F_1$, we can derive $\hat{f_q}-\varepsilon F_1\le f_q\le \hat{f_q}$, where we have
+$$\varepsilon=\cfrac{2}{k}=\cfrac{2}{10}=0.2$$
+$$F_1=\sum_jf_j=1,000,000$$
+For element \texttt{'a'}, we have $94848\le f_q\le 294848$, which might occur more than 20\% time with probably $1-\delta = 31/32$.\\
+For element \texttt{'b'}, we have $-30000\le f_q\le 170000$\\
+For element \texttt{'c'}, we have $39349\le f_q\le 239349$, which might occur more than 20\% time with probably $1-\delta = 31/32$.\\
+\end{enumerate}
+\end{itemize}
+
+\paragraph{C: (5 points)}
+\begin{itemize}
+\item Since the object is a word instead of a character, we read each word at a time from the stream and process it.
+\item For Misra-Gries Algorithm, store the words as strings in the label array. Since the words can be various, increase k value so that we can have better accuracy.
+\item For Count-Min Algorithm, create hash functions that map the words into different counters.
+
+\paragraph{D: (5 points)}
+Count-Min Sketch supports parallel counting with multi-core computing or distributed systems while Misra-Gries doesn't. With Count-Min Sketch, each thread can simultaneously read streams and perform the counting process with the same hash family. After all the threads finished their work, we can simply add every counter table up to get a total counter table. This feature makes Count-Min Sketch much more efficient when dealing with large-scale data.
+
+\newpage
+
+\section{Appendix: Codes}
+\begin{lstlisting}[language=Python]
+def misraGries(s, k):
+    
+    c = [0] * (k-1)
+    l = [''] * (k-1)
+    m = 0
+    
+    while True:
+        a = s.read(1)
+        if not a:
+            break
+
+        m += 1
+        found = False
+        for i in range(k-1):
+            if a == l[i]:
+                c[i] += 1
+                found = True
+                break
+        if not found:
+            hasEmpty = False
+            for i in range(k-1):
+                if c[i] == 0:
+                    l[i] = a
+                    c[i] = 1
+                    hasEmpty = True
+                    break
+            if not hasEmpty:
+                for i in range(k-1):
+                    c[i] -= 1
+    
+    return c, l, m
+    
+class CountMin:
+    
+    def __init__(self, k, t):
+        self.k = k
+        self.t = t
+        self.salt = self.randomsalt(t)
+        
+    def randomsalt(self, t):
+        salt = []
+        for i in range(t):
+            salt.append(''.join(random.choices(string.ascii_letters, k=10)))
+        return salt
+    
+    def h(self, i, x):
+        hashstr = hashlib.sha1((x+self.salt[i]).encode('utf-8')).hexdigest()
+        hashint = int(hashstr, 16) % self.k
+        return hashint
+    
+    def count(self, s):
+        s.seek(0)
+        c = []
+        for i in range(t):
+            c.append([0] * k)
+        f1 = 0
+        
+        while True:
+            a = s.read(1)
+            if not a:
+                break
+            f1 += 1
+            for i in range(t):
+                j = self.h(i, a)
+                c[i][j] = c[i][j] + 1
+        self.c = c
+        self.f1 = f1
+        return c, f1
+    
+    def query(self, char):
+        minCount = float('inf')
+        for i in range(self.t):
+            j = self.h(i, char)
+            if self.c[i][j] < minCount:
+                minCount = self.c[i][j]
+        return minCount
+\end{lstlisting}
+\end{itemize}
+\end{document}
